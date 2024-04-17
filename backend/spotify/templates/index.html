@@ -47,15 +47,15 @@
 
       <!-- Top section of the sidebar -->
       <div class="sidebar-section">
-        <a href="#" class="sidebar-link active">
+        <a href="/" class="sidebar-link active">
           <span class="sidebar-link-icon">🏠</span>
           Home
         </a>
-        <a href="#" class="sidebar-link">
+        <a href="/search" class="sidebar-link">
           <span class="sidebar-link-icon">🔍</span>
           Search
         </a>
-        <a href="#" class="sidebar-link">
+        <a href="/" class="sidebar-link">
           <span class="sidebar-link-icon">🎵</span>
           Your Library
         </a>
@@ -82,14 +82,19 @@
 
     <div style="margin-left: 240px; padding: 20px">
       <header class="header-container">
-        <div class="search-bar" style="width: 390px">
-          <input
-            type="search"
-            placeholder="What do you want to listen to?"
-            aria-label="Search"
-          />
-          <button type="submit" aria-label="Search">🔍</button>
-        </div>
+        <form action="search" method="POST">
+          {% csrf_token %}
+
+          <div class="search-bar" style="width: 390px">
+            <input
+              type="search"
+              name="search_query"
+              placeholder="What do you want to listen to?"
+              aria-label="Search"
+            />
+            <button type="submit" aria-label="Search">🔍</button>
+          </div>
+        </form>
         <div class="search-title">Top Artists</div>
       </header>
 
@@ -105,7 +110,7 @@
           {% for artist in artists_info %}
           <!-- Artist Card -->
           <div class="artist-card">
-            <a href="#" style="text-decoration: none">
+            <a href="/profile/{{artist.2}}" style="text-decoration: none">
               <img
                 src="{{artist.1}}"
                 alt="{{artist.0}}"

@@ -34,11 +34,11 @@
 
       <!-- Top section of the sidebar -->
       <div class="sidebar-section">
-        <a href="#" class="sidebar-link active">
+        <a href="/" class="sidebar-link active">
           <span class="sidebar-link-icon">🏠</span>
           Home
         </a>
-        <a href="#" class="sidebar-link">
+        <a href="/search" class="sidebar-link">
           <span class="sidebar-link-icon">🔍</span>
           Search
         </a>
@@ -81,14 +81,10 @@
     >
       <!-- Music Player Interface -->
       <div class="player-container">
-        <img
-          class="album-cover"
-          src="https://geo-media.beatsource.com/image_size/500x500/5/9/7/5974a942-7721-44db-982d-88b641bb4c94.jpg"
-          alt="Album Cover"
-        />
+        <img class="album-cover" src="{{track_image}}" alt="Album Cover" />
         <div class="song-info">
-          <h2 class="song-title">Song Name</h2>
-          <h3 class="artist-name">Artist Name</h3>
+          <h2 class="song-title">{{track_name}}</h2>
+          <h3 class="artist-name">{{artist_name}}</h3>
         </div>
         <div class="player-controls">
           <button id="prev" class="control-btn">&#9668;</button>
@@ -100,11 +96,65 @@
         </div>
         <div class="time-stamps">
           <span id="current-time">0:00</span>
-          <span id="total-duration">4:00</span>
+          <span id="total-duration">{{duration_text}}</span>
         </div>
       </div>
 
-      <audio id="audio-player" src="{% static 'audio-source-url' %}"></audio>
+      <audio id="audio-player" src="{{audio_url}}"></audio>
     </div>
+    <script>
+      const audioPlayer = document.getElementById("audio-player");
+      const playPauseBtn = document.getElementById("play-pause");
+      const progressBar = document.getElementById("progress-bar");
+      const progress = document.getElementById("progress");
+      const currentTimeElement = document.getElementById("current-time");
+      const totalDurationElement = document.getElementById("total-duration");
+
+      playPauseBtn.addEventListener("click", () => {
+        if (audioPlayer.paused) {
+          audioPlayer.play();
+          playPauseBtn.innerHTML = "&#10074;&#10074;"; // Change to pause icon
+        } else {
+          audioPlayer.pause();
+          playPauseBtn.innerHTML = "&#9658;"; // Change to play icon
+        }
+      });
+
+      audioPlayer.addEventListener("timeupdate", () => {
+        const progressPercentage =
+          (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progress.style.width = `${progressPercentage}%`;
+
+        // Update current time text
+        const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
+        const currentSeconds = Math.floor(
+          audioPlayer.currentTime - currentMinutes * 60
+        );
+        currentTimeElement.textContent = `${currentMinutes}:${currentSeconds
+          .toString()
+          .padStart(2, "0")}`;
+      });
+
+      progressBar.addEventListener("click", (e) => {
+        const progressBarWidth = progressBar.clientWidth;
+        const clickX = e.offsetX;
+        const duration = audioPlayer.duration;
+
+        audioPlayer.currentTime = (clickX / progressBarWidth) * duration;
+      });
+
+      // Move forward 10 seconds
+      document.getElementById("next").addEventListener("click", () => {
+        audioPlayer.currentTime = Math.min(
+          audioPlayer.duration,
+          audioPlayer.currentTime + 10
+        );
+      });
+
+      // Move back 10 seconds
+      document.getElementById("prev").addEventListener("click", () => {
+        audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+      });
+    </script>
   </body>
 </html>
