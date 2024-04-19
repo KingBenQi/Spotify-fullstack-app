@@ -26,7 +26,9 @@ python manage.py runserver
 ![alt text](picture/register.png)
 ### 2. Home Page
 #### Home page shown with top artist and top 18 tracks
+
 ![alt text](picture/home.png)
+
 #### 2.1 Click one of top artists with example shown with Weekend
 #### with his popular songs with click_count and song duration
 
